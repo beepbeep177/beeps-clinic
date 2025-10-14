@@ -2,8 +2,17 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabaseClient";
 
+interface Appointment {
+  id: string;
+  name: string;
+  date: string;
+  time: string;
+  phone: string;
+  reason?: string;
+}
+
 export default function Admin(){
-  const [items, setItems] = useState<any[]>([]);
+  const [items, setItems] = useState<Appointment[]>([]);
   useEffect(()=> { fetchItems(); }, []);
   async function fetchItems(){
     const { data } = await supabase.from('appointments').select('*').order('date', { ascending: true }).limit(200);
