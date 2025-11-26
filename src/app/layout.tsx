@@ -24,6 +24,20 @@ export default function RootLayout({
     "light",
   ];
 
+  const themeColors = {
+    dark: '#ff6b6b',
+    light: '#4ecdc4', 
+    corporate: '#3b82f6',
+    business: '#8b5cf6',
+    garden: '#10b981',
+    cupcake: '#f472b6',
+    luxury: '#f59e0b'
+  } as const;
+
+  const getThemeColor = (currentTheme: string) => {
+    return themeColors[currentTheme as keyof typeof themeColors] || '#6b7280';
+  };
+
   return (
     <html lang="en" data-theme={theme}>
       <body className="relative">
@@ -67,22 +81,13 @@ export default function RootLayout({
           const nextIndex = (currentIndex + 1) % themes.length;
           const newTheme = themes[nextIndex];
           setTheme(newTheme);
-          console.log('Theme changed to:', newTheme); // Debug log
         }}
         className="
           px-3 py-1.5 text-sm rounded-xl 
           bg-white/10 hover:bg-white/20 transition
           text-white flex items-center gap-2 border-2
         "
-        style={{
-          borderColor: theme === 'dark' ? '#ff6b6b' : 
-                      theme === 'light' ? '#4ecdc4' : 
-                      theme === 'corporate' ? '#3b82f6' :
-                      theme === 'business' ? '#8b5cf6' :
-                      theme === 'garden' ? '#10b981' :
-                      theme === 'cupcake' ? '#f472b6' :
-                      theme === 'luxury' ? '#f59e0b' : '#6b7280'
-        }}
+        style={{ borderColor: getThemeColor(theme) }}
         title={`Current: ${theme} (click to cycle)`}
       >
         🎨 <span className="hidden sm:inline capitalize">{theme}</span>
@@ -93,6 +98,7 @@ export default function RootLayout({
         <button
           tabIndex={0}
           className="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 transition"
+          aria-label="Open Menu"
         >
           <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16"/>
@@ -109,9 +115,9 @@ export default function RootLayout({
             z-[100]
           "
         >
-          <li><a href="/">Home</a></li>
-          <li><a href="/schedule/clinic-general">Book</a></li>
-          <li><a href="/admin">Admin</a></li>
+          <li><a href="/" className="text-white hover:bg-white/20 rounded-lg">Home</a></li>
+          <li><a href="/schedule/clinic-general" className="text-white hover:bg-white/20 rounded-lg">Book</a></li>
+          <li><a href="/admin" className="text-white hover:bg-white/20 rounded-lg">Admin</a></li>
         </ul>
       </div>
 

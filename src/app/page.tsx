@@ -1,6 +1,6 @@
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] text-white">
+    <div className="min-h-screen bg-gray-800">
       {/* Hero Section */}
       <div className="min-h-screen flex items-center justify-center px-6">
         <div className="backdrop-blur-xl bg-white/10 border border-white/20 rounded-3xl p-10 shadow-2xl max-w-xl text-center">

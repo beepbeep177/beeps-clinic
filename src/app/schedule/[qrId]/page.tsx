@@ -99,8 +99,8 @@ export default function SchedulePage({
                 value={date}
                 onChange={(e) => setDate(e.target.value)}
                 className="
-                  input input-bordered bg-white/20 text-white 
-                  border-white/30 backdrop-blur-lg
+                  input input-bordered bg-white/20 text-gray-900 
+                  border-gray/300 focus:border-blue-500 focus:ring-blue-500
                 "
                 min={new Date().toISOString().slice(0, 10)}
               />
@@ -137,6 +137,9 @@ export default function SchedulePage({
                       `}
                     >
                       {slot}
+                      {taken && (
+                        <span className="block text-xs text-white/70 font-normal">Booked</span>
+                      )}
                     </button>
                   );
                 })}
@@ -165,7 +168,7 @@ export default function SchedulePage({
                 onChange={(e) => setName(e.target.value)}
                 className="
                   input input-bordered bg-white/20 text-white 
-                  border-white/30 backdrop-blur-lg
+                  border-white/30 backdrop-blur-lg placeholder:text-white/60
                 "
               />
             </div>
@@ -181,7 +184,7 @@ export default function SchedulePage({
                 onChange={(e) => setPhone(e.target.value)}
                 className="
                   input input-bordered bg-white/20 text-white 
-                  border-white/30 backdrop-blur-lg
+                  border-white/30 backdrop-blur-lg placeholder:text-white/60
                 "
               />
             </div>
@@ -205,12 +208,21 @@ export default function SchedulePage({
             <button
               onClick={book}
               disabled={loading || !selectedTime || !name}
-              className={`
-                btn btn-primary w-full rounded-xl 
-                ${loading ? "loading" : ""}
-              `}
+              className="
+                btn w-full rounded-xl 
+                bg-blue-500 hover:bg-blue-600 
+                text-white border-0
+                disabled:opacity-50
+              "
             >
-              {loading ? "Booking..." : "Confirm Booking"}
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm text-white"></span>
+                  Booking...
+                </>
+              ) : (
+                "Confirm Booking"
+              )}
             </button>
           </div>
         </div>

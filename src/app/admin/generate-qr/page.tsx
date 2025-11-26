@@ -113,7 +113,7 @@ export default function GenerateQr() {
                 value={qrId}
                 onChange={(e) => setQrId(e.target.value)}
                 className="
-                  input rounded-xl bg-white/5 border border-white/20 text-white
+                  input rounded-xl bg-white/5 border border-white/20 text-white placeholder:text-white/60
                 "
                 placeholder="clinic-general, clinic-dental, etc."
               />
