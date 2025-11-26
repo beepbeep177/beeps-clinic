@@ -7,14 +7,15 @@ import clientPromise from "@/lib/mongodb";
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
+    const { id } = await params;
     const client = await clientPromise;
     const db = client.db('qr-clinic');
 
     await db.collection('appointments').deleteOne({
-      _id: new ObjectId(params.id)
+      _id: new ObjectId(id)
     });
 
     return NextResponse.json({ success: true });
