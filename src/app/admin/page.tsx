@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Appointment {
   _id: string;
@@ -11,11 +12,29 @@ interface Appointment {
 }
 
 export default function Admin() {
+  const {isAdmin, loading, logout, requireAuth } = useAuth();
   const [items, setItems] = useState<Appointment[]>([]);
+
+  // All hooks must be at the top, before any conditional returns
+  useEffect(() => {
+    requireAuth();
+  }, [isAdmin, loading, requireAuth]);
   
   useEffect(() => {
-    fetchItems();
-  }, []);
+    if (isAdmin && !loading) {
+      fetchItems();
+    }
+  }, [isAdmin, loading]);
+   
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">
+      <div className="text-white">Loading...</div>
+    </div>
+  }
+
+  if (!isAdmin) {
+    return null; //redirects back to login
+  }
   
   async function fetchItems() {
     const response = await fetch("/api/appointments");
@@ -47,18 +66,23 @@ export default function Admin() {
           <h1 className="text-4xl font-extrabold text-white tracking-tight">
             Admin Dashboard
           </h1>
+ {/* Button Group */}
+  <div className="flex gap-3">
+    <a
+      href="/admin/generate-qr"
+      className="btn rounded-xl px-5 bg-blue-500 text-white border border-blue-300/50 hover:bg-blue-600"
+    >
+      Generate QR Code
+    </a>
 
-          <a
-            href="/admin/generate-qr"
-            className="
-              btn rounded-xl px-5 
-              bg-blue-500 text-white border border-blue-300/50
-              hover:bg-blue-600
-            "
-          >
-            Generate QR Code
-          </a>
-        </div>
+    <button
+      onClick={logout}
+      className="btn rounded-xl px-5 bg-red-500 text-white border border-red-300/50 hover:bg-red-600"
+    >
+      Logout
+    </button>
+  </div>
+</div>
 
         {/* Stats */}
         <div
