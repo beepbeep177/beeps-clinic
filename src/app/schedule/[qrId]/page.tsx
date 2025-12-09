@@ -13,6 +13,7 @@ export default function SchedulePage({
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [reason, setReason] = useState("");
   const [loading, setLoading] = useState(false);
   const slotInterval = 30;
 
@@ -45,7 +46,7 @@ export default function SchedulePage({
     const response = await fetch("/api/appointments", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ qrId, name, phone, date, time: selectedTime }),
+      body: JSON.stringify({ qrId, name, phone, date, time: selectedTime, reason }),
     });
 
     setLoading(false);
@@ -56,6 +57,7 @@ export default function SchedulePage({
       fetchBooked();
       setName("");
       setPhone("");
+      setReason("");
       setSelectedTime(null);
     }
   }
@@ -171,7 +173,7 @@ export default function SchedulePage({
               />
             </div>
 
-            <div className="form-control mb-6">
+            <div className="form-control mb-4">
               <label className="label">
                 <span className="label-text text-base-content opacity-80">
                   Phone Number
@@ -184,6 +186,26 @@ export default function SchedulePage({
                 onChange={(e) => setPhone(e.target.value)}
                 className="input input-bordered"
               />
+            </div>
+
+            <div className="form-control mb-6">
+              <label className="label">
+                <span className="label-text text-black-content opacity-80">
+                  Reason for Visit
+                </span>
+              </label>
+              <textarea
+                placeholder="Brief reason for your visit (optional)"
+                value={reason}
+                onChange={(e) => setReason(e.target.value.slice(0, 100))}
+                maxLength={100}
+                className="textarea textarea-bordered h-20 resize-none"
+              />
+              <label className="label">
+                <span className="label-text-alt text-base-content opacity-60">
+                  {reason.length}/100 characters
+                </span>
+              </label>
             </div>
 
             {/* Booking Summary */}
