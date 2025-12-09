@@ -42,10 +42,10 @@ export default function SchedulePage({
     if (!selectedTime || !name) return alert("Enter name & select time");
     setLoading(true);
 
-    const response = await fetch('/api/appointments', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ qrId, name, phone, date, time: selectedTime })
+    const response = await fetch("/api/appointments", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ qrId, name, phone, date, time: selectedTime }),
     });
 
     setLoading(false);
@@ -63,119 +63,159 @@ export default function SchedulePage({
   const slots = generateSlots();
 
   return (
-    <div className="min-h-screen bg-base-200 p-4">
-      <div className="container mx-auto max-w-4xl">
+    <div className="min-h-screen p-6 pt-20 relative bg-gradient-to-br from-base-100 via-base-200 to-base-300">
+
+      <div className="container mx-auto max-w-5xl pt-28">
         {/* Header */}
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold mb-2">Book Your Appointment</h1>
-          <p className="text-base-content/60">Select your preferred date and time</p>
+        <div className="text-center mb-12 text-base-content">
+          <h1 className="text-5xl font-bold mb-2 tracking-tight text-primary">
+            📅 Book Appointment
+          </h1>
+          <p className="text-base-content opacity-70">
+            Choose a schedule that works for you
+          </p>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Date & Time Selection */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title mb-4">Select Date & Time</h2>
-              
-              {/* Date Picker */}
-              <div className="form-control mb-6">
-                <label className="label">
-                  <span className="label-text font-semibold">Choose Date</span>
-                </label>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={(e) => setDate(e.target.value)}
-                  className="input input-bordered"
-                  min={new Date().toISOString().slice(0, 10)}
-                />
-              </div>
+          <div
+            className="
+              backdrop-blur-xl bg-base-100 
+              border border-base-200 shadow-2xl 
+              rounded-2xl p-6 hover:border-primary hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-300
+            "
+          >
+            <h2 className="text-xl font-bold text-base-content mb-6">
+              📅 Select Date & Time
+            </h2>
 
-              {/* Time Slots */}
-              <div>
-                <label className="label">
-                  <span className="label-text font-semibold">Available Times</span>
-                </label>
-                <div className="grid grid-cols-3 gap-2">
-                  {slots.map((slot) => {
-                    const taken = bookedTimes.includes(slot);
-                    const selected = selectedTime === slot;
-                    
-                    return (
-                      <button
-                        key={slot}
-                        disabled={taken}
-                        onClick={() => setSelectedTime(slot)}
-                        className={`btn btn-sm ${
-                          taken 
-                            ? 'btn-disabled' 
-                            : selected 
-                            ? 'btn-primary' 
-                            : 'btn-outline'
-                        }`}
-                      >
-                        {slot}
-                        {taken && <span className="text-xs">Booked</span>}
-                      </button>
-                    );
-                  })}
-                </div>
+            {/* Date Picker */}
+            <div className="form-control mb-6">
+              <label className="label">
+                <span className="label-text text-base-content opacity-80 font-semibold">
+                  Choose Date
+                </span>
+              </label>
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="input input-bordered"
+                min={new Date().toISOString().slice(0, 10)}
+              />
+            </div>
+
+            {/* Time Slots */}
+            <div>
+              <label className="label">
+                <span className="label-text text-base-content opacity-80 font-semibold">
+                  Available Times
+                </span>
+              </label>
+
+              <div className="grid grid-cols-3 gap-2">
+                {slots.map((slot) => {
+                  const taken = bookedTimes.includes(slot);
+                  const selected = selectedTime === slot;
+
+                  return (
+                    <button
+                      key={slot}
+                      disabled={taken}
+                      onClick={() => setSelectedTime(slot)}
+                      className={`btn btn-sm rounded-xl transition-all ${
+                        taken
+                          ? "btn-disabled opacity-30 cursor-not-allowed"
+                          : selected
+                          ? "btn btn-sm btn-primary"
+                          : "btn btn-sm btn-ghost hover:border-primary"
+                      } backdrop-blur-md`}
+                    >
+                      {slot}
+                      {taken && (
+                        <span className="block text-xs text-base-content opacity-70 font-normal">
+                          Booked
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
 
           {/* Patient Information */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title mb-4">Your Information</h2>
-              
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text">Full Name *</span>
-                </label>
-                <input
-                  type="text"
-                  placeholder="Enter your full name"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="input input-bordered"
-                  required
-                />
-              </div>
+          <div
+            className="
+              backdrop-blur-xl bg-base-100 
+              border border-base-200 shadow-2xl 
+              rounded-2xl p-6 hover:border-primary hover:shadow-[0_0_30px_rgba(16,185,129,0.2)] transition-all duration-300
+            "
+          >
+            <h2 className="text-xl font-bold text-base-content mb-6">
+              👤 Your Information
+            </h2>
 
-              <div className="form-control mb-6">
-                <label className="label">
-                  <span className="label-text">Phone Number</span>
-                </label>
-                <input
-                  type="tel"
-                  placeholder="Enter your phone number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="input input-bordered"
-                />
-              </div>
-
-              {/* Booking Summary */}
-              {selectedTime && name && (
-                <div className="alert alert-info mb-4">
-                  <div>
-                    <h3 className="font-bold">Booking Summary</h3>
-                    <p>Date: {date}</p>
-                    <p>Time: {selectedTime}</p>
-                    <p>Patient: {name}</p>
-                  </div>
-                </div>
-              )}
-
-              <button
-                onClick={book}
-                disabled={loading || !selectedTime || !name}
-                className={`btn btn-primary btn-lg w-full ${loading ? 'loading' : ''}`}
-              >
-                {loading ? 'Booking...' : 'Confirm Booking'}
-              </button>
+            <div className="form-control mb-4">
+              <label className="label">
+                <span className="label-text text-base-content opacity-80">
+                  Full Name *
+                </span>
+              </label>
+              <input
+                type="text"
+                placeholder="Enter your full name"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                className="input input-bordered"
+              />
             </div>
+
+            <div className="form-control mb-6">
+              <label className="label">
+                <span className="label-text text-base-content opacity-80">
+                  Phone Number
+                </span>
+              </label>
+              <input
+                type="tel"
+                placeholder="Enter your phone number"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                className="input input-bordered"
+              />
+            </div>
+
+            {/* Booking Summary */}
+            {selectedTime && name && (
+              <div
+                className="
+                  p-4 rounded-xl mb-4 
+                  bg-primary/20 border border-primary/30
+                  backdrop-blur-xl text-base-content
+                "
+              >
+                <h3 className="font-semibold mb-2 text-primary">✓ Booking Summary</h3>
+                <p className="mb-1"><span className="opacity-70">Date:</span> <span className="font-semibold">{format(new Date(date), "MMMM dd, yyyy")}</span></p>
+                <p className="mb-1"><span className="opacity-70">Time:</span> <span className="font-semibold">{selectedTime}</span></p>
+                <p><span className="opacity-70">Patient:</span> <span className="font-semibold">{name}</span></p>
+              </div>
+            )}
+
+            <button
+              onClick={book}
+              disabled={loading || !selectedTime || !name}
+              className="btn w-full rounded-xl btn-primary disabled:opacity-50"
+            >
+              {loading ? (
+                <>
+                  <span className="loading loading-spinner loading-sm text-base-content"></span>
+                  Booking...
+                </>
+              ) : (
+                "Confirm Booking"
+              )}
+            </button>
           </div>
         </div>
       </div>

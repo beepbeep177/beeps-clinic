@@ -19,12 +19,13 @@ export async function GET(request: NextRequest) {
 
     const appointments = await db.collection('appointments')
       .find(filter)
-      .sort({ date: 1 })
+      .sort({ date: 1, time: 1 })
       .limit(200)
       .toArray();
     return NextResponse.json(appointments);
-  } catch (_error) {
-    return NextResponse.json({ error: 'Failed to fetch' }, { status: 500 });
+  } catch (error) {
+    console.error('Fetch appointments error:', error);
+    return NextResponse.json({ error: 'Failed to fetch appointments' }, { status: 500 });
   }
 }
 
@@ -33,12 +34,33 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
+    const { qrId, name, phone, date, time } = body;
+
+    // Validation
+    if (!qrId || !name || !date || !time) {
+      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
+    }
+
     const client = await clientPromise;
     const db = client.db('qr-clinic');
 
-    const result = await db.collection('appointments').insertOne(body);
+    // Check if slot is already booked
+    const existing = await db.collection('appointments').findOne({ qrId, date, time });
+    if (existing) {
+      return NextResponse.json({ error: 'Time slot already booked' }, { status: 409 });
+    }
+
+    // Add timestamps
+    const appointment = {
+      ...body,
+      createdAt: new Date(),
+      updatedAt: new Date()
+    };
+
+    const result = await db.collection('appointments').insertOne(appointment);
     return NextResponse.json({ success: true, id: result.insertedId });
-  } catch (_error) {
-    return NextResponse.json({ error: 'Failed to create' }, { status: 500 });
+  } catch (error) {
+    console.error('Appointment creation error:', error);
+    return NextResponse.json({ error: 'Failed to create appointment' }, { status: 500 });
   }
 }

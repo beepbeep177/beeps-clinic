@@ -56,109 +56,139 @@ export default function GenerateQr() {
   };
 
   return (
-    <div className="min-h-screen bg-base-200 p-4">
-      <div className="container mx-auto max-w-4xl">
+    <div className="min-h-screen relative p-8 pt-20">
+      {/* Background gradient */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#0f172a] via-[#1e293b] to-[#0f172a] -z-10" />
+
+      <div className="container mx-auto max-w-5xl">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold">QR Code Generator</h1>
-          <a href="/admin" className="btn btn-outline">
+        <div
+          className="
+              flex justify-between items-center mb-10 
+              backdrop-blur-xl bg-base-100 border border-base-200 
+              p-6 rounded-2xl shadow-2xl
+            "
+        >
+          <h1 className="text-4xl font-extrabold text-base-content tracking-tight">
+            QR Code Generator
+          </h1>
+
+          <a href="/admin" className="btn rounded-xl px-5 btn-ghost">
             Back to Admin
           </a>
         </div>
 
         <div className="grid lg:grid-cols-2 gap-8">
-          {/* QR Configuration */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title mb-4">QR Code Settings</h2>
+          {/* Left: QR Settings */}
+          <div
+            className="
+              backdrop-blur-xl bg-base-100 
+              border border-base-200 shadow-2xl 
+              rounded-2xl p-6
+            "
+          >
+            <h2 className="text-2xl text-base-content font-bold mb-6">
+              QR Code Settings
+            </h2>
 
-              <div className="form-control mb-4">
-                <label className="label">
-                  <span className="label-text font-semibold">QR Code ID</span>
-                </label>
-                <input
-                  type="text"
-                  value={qrId}
-                  onChange={(e) => setQrId(e.target.value)}
-                  className="input input-bordered"
-                  placeholder="e.g., clinic-general, clinic-pediatric"
-                />
-                <label className="label">
-                  <span className="label-text-alt">
-                    This will be part of the booking URL
-                  </span>
-                </label>
-              </div>
-
-              <div className="form-control mb-6">
-                <label className="label">
-                  <span className="label-text font-semibold">
-                    Generated URL
-                  </span>
-                </label>
-                <input
-                  type="text"
-                  value={`${
-                    typeof window !== "undefined" ? window.location.origin : ""
-                  }/schedule/${qrId}`}
-                  className="input input-bordered"
-                  readOnly
-                />
-              </div>
-
-              <button
-                onClick={generateQR}
-                disabled={loading}
-                className={`btn btn-primary w-full ${loading ? "loading" : ""}`}
-              >
-                {loading ? "Generating..." : "Generate QR Code"}
-              </button>
+            {/* QR ID Input */}
+            <div className="form-control mb-6">
+              <label className="label">
+                <span className="text-base-content opacity-80 font-semibold">
+                  QR Code ID
+                </span>
+              </label>
+              <input
+                type="text"
+                value={qrId}
+                onChange={(e) => setQrId(e.target.value)}
+                className="input rounded-xl input-bordered"
+                placeholder="clinic-general, clinic-dental, etc."
+              />
+              <label className="label">
+                <span className="text-base-content opacity-50 text-sm">
+                  This will be part of the booking URL
+                </span>
+              </label>
             </div>
+
+            {/* URL Display */}
+            <div className="form-control mb-6">
+              <label className="label">
+                <span className="text-base-content opacity-80 font-semibold">
+                  Generated URL
+                </span>
+              </label>
+              <input
+                type="text"
+                readOnly
+                value={`${
+                  typeof window !== "undefined" ? window.location.origin : ""
+                }/schedule/${qrId}`}
+                className="input rounded-xl input-bordered"
+              />
+            </div>
+
+            <button
+              onClick={generateQR}
+              disabled={loading}
+              className="btn w-full rounded-xl mt-4 btn-primary"
+            >
+              {loading ? "Generating..." : "Generate QR Code"}
+            </button>
           </div>
 
-          {/* QR Code Display */}
-          <div className="card bg-base-100 shadow-xl">
-            <div className="card-body">
-              <h2 className="card-title mb-4">Generated QR Code</h2>
+          {/* Right: QR Preview */}
+          <div
+            className="
+              backdrop-blur-xl bg-base-100 
+              border border-base-200 shadow-2xl 
+              rounded-2xl p-6 text-center
+            "
+          >
+            <h2 className="text-2xl text-base-content font-bold mb-6">
+              QR Code Preview
+            </h2>
 
-              {img ? (
-                <div className="text-center">
-                  <div className="bg-white p-4 rounded-lg inline-block mb-4">
-                    <img src={img} alt="QR Code" className="mx-auto" />
-                  </div>
-
-                  <div className="space-y-2">
-                    <button
-                      onClick={downloadQR}
-                      className="btn btn-success w-full"
-                    >
-                      Download QR Code
-                    </button>
-
-                    <button
-                      onClick={printQR}
-                      className="btn btn-outline w-full"
-                    >
-                      Print QR Code
-                    </button>
-                  </div>
-
-                  <div className="mt-4 p-4 bg-base-200 rounded-lg">
-                    <h3 className="font-semibold mb-2">Instructions:</h3>
-                    <ul className="text-sm text-left space-y-1">
-                      <li>• Print and display this QR code at your clinic</li>
-                      <li>• Patients can scan to book appointments</li>
-                      <li>• Each QR code links to: /schedule/{qrId}</li>
-                    </ul>
-                  </div>
+            {img ? (
+              <>
+                <div className="bg-base-200 p-4 rounded-xl inline-block mb-6">
+                  <img src={img} alt="QR Code" className="w-64 mx-auto" />
                 </div>
-              ) : (
-                <div className="text-center py-8">
-                  <div className="loading loading-spinner loading-lg"></div>
-                  <p className="mt-4">Generating QR code...</p>
+
+                <button
+                  onClick={downloadQR}
+                  className="btn btn-success w-full rounded-xl mb-3"
+                >
+                  Download QR Code
+                </button>
+
+                <button
+                  onClick={printQR}
+                  className="btn w-full rounded-xl btn-ghost"
+                >
+                  Print QR Code
+                </button>
+
+                <div className="mt-6 p-4 rounded-xl bg-base-200 border border-base-200">
+                  <h3 className="font-semibold text-base-content mb-2">
+                    Instructions:
+                  </h3>
+                  <ul className="text-sm text-base-content opacity-70 text-left space-y-1">
+                    <li>• Print and display this QR code at your clinic</li>
+                    <li>• Patients can scan to book appointments</li>
+                    <li>• URL: /schedule/{qrId}</li>
+                  </ul>
                 </div>
-              )}
-            </div>
+              </>
+            ) : (
+              <div className="text-center py-12">
+                <span className="loading loading-spinner loading-lg text-base-content"></span>
+                <p className="mt-4 text-base-content opacity-70">
+                  Generating QR code...
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>
