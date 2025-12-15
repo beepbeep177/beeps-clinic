@@ -1,8 +1,14 @@
+"use client";
+import DarkVeil from "@/components/DarkVeil";
+
 export default function Home() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-base-100 via-base-200 to-base-300">
+    <div className="min-h-screen relative">
+      <div className="absolute inset-0">
+        <DarkVeil />
+      </div>
       {/* Hero Section */}
-      <section className="min-h-screen flex items-center justify-center px-6">
+      <section className="min-h-screen flex items-center justify-center px-6 relative z-10">
         <div className="backdrop-blur-xl bg-base-100/70 border border-base-200 rounded-3xl p-12 shadow-2xl max-w-2xl text-center transition-all duration-300 hover:border-primary hover:shadow-[0_0_40px_rgba(16,185,129,0.3)]">
           <h1 className="text-6xl font-extrabold mb-6 text-base-content hover:text-primary transition-colors duration-300">
             QR Clinic

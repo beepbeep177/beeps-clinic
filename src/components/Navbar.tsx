@@ -6,10 +6,10 @@ export default function Navbar() {
 
   return (
     <div className="fixed top-4 left-1/2 -translate-x-1/2 z-50 w-[95%] max-w-7xl px-4">
-      <div className="h-14 rounded-2xl px-4 sm:px-6 flex items-center justify-between backdrop-blur-xl bg-base-100/80 border border-base-200 shadow-lg">
+      <div className="h-14 rounded-2xl px-4 sm:px-6 flex items-center justify-between backdrop-blur-sm bg-transparent border border-white/20 shadow-lg">
         {/* Logo */}
         <a href="/" className="text-lg sm:text-xl font-bold tracking-tight whitespace-nowrap">
-          QR Clinic
+          Beep's Clinic
         </a>
 
         {/* Desktop Menu */}
